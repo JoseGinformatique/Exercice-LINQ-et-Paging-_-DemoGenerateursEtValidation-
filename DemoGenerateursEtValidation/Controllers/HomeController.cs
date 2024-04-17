@@ -17,21 +17,19 @@ namespace DemoGenerateursEtValidation.Controllers
 
         public async Task<IActionResult> Index(int? pageNumber, string? mot)
         {
-            return View( _collectionAutos.MesAuto); //Afficher la liste d'auto
-
             if (!string.IsNullOrEmpty(mot))
             {
                 ViewBag.Recherche = mot;
 
-                IQueryable<Auto> resultats = from auto in ((DBAutoRep)_collectionAutos).MesAutoQuery where auto.Marque.Contains(mot) select auto;
+                IQueryable<Auto> resultats = from auto in ((DBAutoRep)_collectionAutos).MesAutoQuery where auto.Marque.Contains(mot) || auto.Model.Contains(mot) || auto.Prix.ToString() == mot select auto;
 
-                int pageSize = 3; // Nombre d'ingrédients par page
+                int pageSize = 10; // Nombre d'autos par page
                 return View(await PaginatedList<Auto>.CreateAsync(resultats,
                    pageNumber ?? 1, pageSize)); // Créer une page avec les résultats
             }
             else
             {
-                int pageSize = 3; // Nombre d'ingrédients par page
+                int pageSize = 10; // Nombre d'autos par page
                 return View(await PaginatedList<Auto>.CreateAsync(((DBAutoRep)_collectionAutos).MesAutoQuery,
                    pageNumber ?? 1, pageSize)); // Créer une page avec les résultats
             }

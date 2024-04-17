@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DemoGenerateursEtValidation.Models.Auto>
+﻿@model PaginatedList<DemoGenerateursEtValidation.Models.Auto>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,17 +9,25 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<form asp-action="Index" method="get"> 
+    Recherche
+    <input name="mot" />
+    <input type="submit" />
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Marque)
+                Marque
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Model)
+                Model
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prix)
+                Prix
             </th>
             <th></th>
         </tr>
@@ -45,3 +53,32 @@
 }
     </tbody>
 </table>
+
+@{  
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action="Index"
+    asp-route-pageNumber="@(1)"
+    asp-route-mot=@(ViewBag.Recherche)
+    class="btn btn-default @prevDisabled">
+        &lt;&lt; 
+</a> 
+<a asp-action="Index"
+    asp-route-pageNumber="@(Model.PageIndex - 1)"
+    asp-route-mot=@(ViewBag.Recherche)
+    class="btn btn-default @prevDisabled">
+        &lt; 	
+</a> 
+<a asp-action="Index"
+    asp-route-pageNumber="@(Model.PageIndex + 1)"
+    asp-route-mot=@(ViewBag.Recherche)
+    class="btn btn-default @nextDisabled">
+        &gt;	
+	</a> 
+<a asp-action="Index"
+    asp-route-pageNumber="@(Model.TotalPages)"
+    asp-route-mot=@(ViewBag.Recherche)
+        class="btn btn-default @nextDisabled">
+        &gt;&gt; 
+</a>
